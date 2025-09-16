@@ -1,0 +1,176 @@
+
+####### PACOTES ################################################################
+
+library(lubridate) #pacote para trabalhar com datas
+library(dplyr)  #pacote para tratamento de dados
+
+################################################################################
+
+
+
+
+
+
+#######  O ################################
+
+data_final <- Sys.Date() #usa a data do sistema como referência
+
+datas <- seq(data_final %m-% months(23), data_final, by = "month") #cria uma sequência de 24 meses, terminando no mês atual
+
+refs <- format(datas, "%Y%m") #converte de "yyyy-mm-dd" para "yyyymm"
+
+dados_lista <- list() #lista para guardar os arquivos csv
+
+#looping para baixar e descompactar os arquivos
+for (ref in refs){ #realiza os comandos abaixo para cada data no objeto refs
+  url <- paste0("https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_", ref, ".zip") #cola a data no link para download
+  
+  arq_zip <- tempfile(fileext = ".zip") #arquivo temporário para o compactado
+  arq_dir <- tempdir() #arquivo temporário para o descompactado
+  
+  download.file(url, arq_zip, mode = "wb", quiet = TRUE) #baixando a url criada no arquivo temporário
+  unzip(arq_zip, exdir = arq_dir) #descompactando o arquivo temporário
+    
+  arq_csv <- list.files(arq_dir, pattern = paste0("inf_diario_fi_", ref, ".csv$"), full.names = TRUE) #dentro do arquivo descompactado procura aquele que possui esse padrão
+    
+  dados <- read.csv(arq_csv, sep = ";", stringsAsFactors = FALSE) #lê o arquivo zipado
+  
+  #tratando os meses em que as colunas estão com nomes diferentes
+  if ("TP_FUNDO_CLASSE" %in% names(dados)) {
+    names(dados)[names(dados) == "TP_FUNDO_CLASSE"] <- "TP_FUNDO"
+  }
+  
+  #tratando os meses em que as colunas estão com nomes diferentes
+  if ("CNPJ_FUNDO_CLASSE" %in% names(dados)) {
+    names(dados)[names(dados) == "CNPJ_FUNDO_CLASSE"] <- "CNPJ_FUNDO"
+  }
+  
+  dados$referencia <- ref #criando uma coluna com o mês de referência
+  dados_lista[[ref]] <- dados #incluíndo os dados na lista
+}
+
+dados_completos <- bind_rows(dados_lista) #empilhando os dados da lista usando dplyr
+
+################################################################################
+
+
+
+
+
+
+
+####### ESTATÍSTICAS DA BASE DE DADOS COMPLETA #################################
+
+#quantidade de fundos na base em todo o período (sem filtrar) = 31555
+length(unique(dados_completos$CNPJ_FUNDO)) #tamanho do vetor de cnpj (sem repetições)
+
+################################################################################
+
+
+
+
+
+
+
+####### FILTRANDO A BASE DE DADOS ##############################################
+
+### FILTRANDO FUNDOS QUE OPERARAM NO ÚLTIMO ANO
+
+#coluna data está com classe de caracteres, deve-se transformar em data
+class(dados_completos$DT_COMPTC)
+  
+#transformar a coluna de data em Date para conseguir manipular
+dados_completos$DT_COMPTC <- as.Date(dados_completos$DT_COMPTC)
+
+#calcular a data de corte = 365 dias corridos a menos
+data_corte <- max(dados_completos$DT_COMPTC) %m-% days(365)
+
+#fundos que possuem pelo menos 252 observações (dias úteis) desde a data de corte
+cnpjs_filtrados1 <- dados_completos %>%
+  filter(DT_COMPTC >= data_corte) %>%
+  group_by(CNPJ_FUNDO) %>%
+  summarise(n_obs = sum(!is.na(VL_QUOTA))) %>%
+  filter(n_obs >= 252) %>%
+  pull(CNPJ_FUNDO)
+
+#### FILTRANDO CNPJS COM MAIS DE 100 COTISTAS (RETIRA FUNDOS EXCLUSIVOS E POTENCIALMENTE FECHADOS)
+cnpjs_filtrados2 <- dados_completos %>% #esse símbolo significa que vai fazer uma sequência de operações
+  group_by(CNPJ_FUNDO) %>% #opera por CNPJ
+  summarise(media_cotistas = mean(NR_COTST, na.rm = TRUE)) %>% #tira a média de cotistas no período por CNPJ
+  filter(media_cotistas > 100)  %>% #filtra apenas CNPJs com mais de 100 cotistas em média
+  pull(CNPJ_FUNDO) #puxa apenas o cnpj no objeto final
+
+#aplicando os filtros
+dados_filtrados <- dados_completos %>%
+  filter(CNPJ_FUNDO %in% cnpjs_filtrados1,
+         CNPJ_FUNDO %in% cnpjs_filtrados2)
+  
+#quantidade de fundos na base filtrada = 1029
+length(unique(dados_filtrados$CNPJ_FUNDO))
+
+#estatisticas descritivas
+
+
+################################################################################
+
+
+
+
+
+
+
+
+####### CALCULANDO INDICADORES #################################################
+
+indicadores <- dados_filtrados %>%
+  arrange(CNPJ_FUNDO, DT_COMPTC) %>% #organiza por CNPJ e data
+  group_by(CNPJ_FUNDO) %>% #realizar as operações abaixo para cada CNPJ
+  mutate( #cria colunas
+    retorno_diario = (VL_QUOTA / lag(VL_QUOTA)) - 1,
+    ano_atual = year(DT_COMPTC),
+    mes_atual = floor_date(DT_COMPTC, "month")
+  ) %>%
+  summarise( #cria os indicadores para cada CNPJ
+    #retorno mediário médio no período inteiro
+    retorno_diario_medio = 100*mean(retorno_diario, na.rm = TRUE),
+    #retorno no último mês
+    retorno_1m = 100*(
+      last(VL_QUOTA, order_by = DT_COMPTC)/
+        first(na.omit(VL_QUOTA[DT_COMPTC>=(max(DT_COMPTC) %m-% months(1))]))-1),
+    #retorno no último ano
+    retorno_1a = 100*(
+      last(VL_QUOTA, order_by = DT_COMPTC)/
+        first(na.omit(VL_QUOTA[DT_COMPTC >= (max(DT_COMPTC) %m-% years(1))]))-1),
+    #retorno nos últimos 2 anos
+    retorno_2a = 100*(
+      last(VL_QUOTA, order_by = DT_COMPTC)/
+        first(na.omit(VL_QUOTA), order_by = DT_COMPTC)-1),
+    #volatilidade no último mês anualizada
+    vol_1m = sd(retorno_diario[DT_COMPTC >= (max(DT_COMPTC) %m-% months(1))],na.rm = TRUE)*sqrt(252),
+    #volatilidade no último ano anualizada
+    vol_1a=sd(retorno_diario[DT_COMPTC>=(max(DT_COMPTC) %m-% years(1))],na.rm = TRUE)*sqrt(252),
+    #volatilidade nos últimos 2 anos anualizada
+    vol_2a=sd(retorno_diario, na.rm=TRUE)*sqrt(2*252),
+    #patrimônio líquido médio
+    pl_medio = mean(VL_PATRIM_LIQ, na.rm = TRUE)
+  )
+
+View(indicadores)
+
+#fundo com maior retorno no último mês
+head(indicadores %>% arrange(desc(retorno_1m)),1)
+
+#fundo com menor retorno no último mês
+head(indicadores %>% arrange(retorno_1m),1)
+
+#fundo com menor volatilidade no último ano
+head(indicadores %>% arrange(vol_1a),1)
+
+#fundo com menor volatilidade no último ano
+head(indicadores %>% arrange(desc(vol_1a)),1) #retornos bem menores que o fundo com menos vol
+
+#resumo dos indicadores
+summary(indicadores)
+
+################################################################################
+
