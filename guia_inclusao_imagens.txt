@@ -1,0 +1,96 @@
+# Guia Detalhado para Inclusão das Imagens no TCC
+
+Este guia fornece instruções detalhadas sobre como incluir as imagens geradas pelo script Python no seu documento TCC em formato Word.
+
+## Imagens Disponíveis
+
+O script gerou quatro imagens importantes que devem ser incluídas no documento:
+
+1. **elbow_method.png** - Método do cotovelo para determinar o número ideal de clusters
+2. **silhouette_plot.png** - Visualização do coeficiente de silhueta
+3. **kmeans_clusters.png** - Visualização dos clusters K-means
+4. **dbscan_clusters.png** - Visualização dos clusters DBSCAN
+
+## Posicionamento Recomendado
+
+As imagens devem ser inseridas nas seguintes seções do documento:
+
+1. **Seção "Clusterização e Validação" (após linha 267)**:
+   - Figura 1: elbow_method.png
+   - Figura 2: silhouette_plot.png
+
+2. **Seção "Análise dos Perfis de Clusters" (após linha 321)**:
+   - Figura 3: kmeans_clusters.png
+   - Figura 4: dbscan_clusters.png
+
+## Instruções Passo a Passo para Inserir Imagens no Word
+
+### 1. Preparação
+
+- Certifique-se de que as quatro imagens estão disponíveis no seu computador
+- Verifique se as imagens estão nítidas e legíveis
+
+### 2. Inserir a Imagem
+
+1. Abra o documento "Template TCC_PT_Andressa Evellyn Toshie Joboji.docx" no Microsoft Word
+2. Posicione o cursor no local onde deseja inserir a imagem (conforme recomendações acima)
+3. Clique na guia **"Inserir"** na barra de ferramentas do Word
+4. Clique em **"Imagens"** e depois em **"Este Dispositivo"**
+5. Navegue até a pasta onde as imagens estão salvas
+6. Selecione a imagem desejada e clique em **"Inserir"**
+
+### 3. Formatar a Imagem
+
+1. Com a imagem selecionada, ajuste o tamanho:
+   - Clique e arraste os cantos da imagem para redimensioná-la proporcionalmente
+   - Recomendação: largura entre 12-14 cm (aproximadamente 75-85% da largura da página)
+
+2. Alinhe a imagem ao centro:
+   - Com a imagem selecionada, clique na guia **"Formatar"**
+   - Na seção **"Organizar"**, clique em **"Posição"** e selecione uma opção de alinhamento central
+   - Ou clique com o botão direito na imagem, selecione **"Quebra de texto"** > **"Em linha com o texto"**, e depois use o botão de centralizar na barra de ferramentas
+
+3. Adicione espaçamento adequado:
+   - Deixe pelo menos uma linha em branco antes e depois da imagem
+
+### 4. Adicionar Legenda
+
+1. Clique com o botão direito na imagem
+2. Selecione **"Inserir Legenda"**
+3. No campo **"Legenda"**, digite o texto conforme sugerido:
+   - Para elbow_method.png: "Figura 1: Método do Cotovelo para Determinação do Número Ideal de Clusters"
+   - Para silhouette_plot.png: "Figura 2: Visualização do Coeficiente de Silhueta para Validação dos Clusters"
+   - Para kmeans_clusters.png: "Figura 3: Visualização Bidimensional dos Clusters K-means após Redução de Dimensionalidade por PCA"
+   - Para dbscan_clusters.png: "Figura 4: Visualização dos Clusters DBSCAN (Método Alternativo de Clusterização)"
+4. Clique em **"OK"**
+5. Adicione a fonte abaixo da legenda: "*Fonte: Elaborado pelo autor (2025)*" (em itálico)
+
+### 5. Referenciando as Imagens no Texto
+
+Para cada imagem inserida, certifique-se de referenciá-la no texto:
+
+1. Antes da Figura 1, adicione: "O método do cotovelo, ilustrado na Figura 1, mostra a relação entre o número de clusters e a soma dos quadrados intra-cluster (WSS)."
+
+2. Antes da Figura 2, adicione: "A Figura 2 apresenta o gráfico de silhueta, onde valores mais próximos de 1 indicam que os objetos estão bem alocados em seus clusters."
+
+3. Antes da Figura 3, adicione: "A Figura 3 apresenta a visualização dos clusters após a aplicação de PCA (Principal Component Analysis) para redução de dimensionalidade."
+
+4. Antes da Figura 4, adicione: "A Figura 4 mostra os resultados da clusterização DBSCAN, que identificou 7 clusters (0-6) além de pontos classificados como ruído (-1)."
+
+## Dicas para Melhor Apresentação Visual
+
+1. **Consistência**: Mantenha o mesmo tamanho e estilo para todas as imagens
+2. **Resolução**: Certifique-se de que as imagens estão nítidas e legíveis
+3. **Espaçamento**: Evite páginas com apenas imagens; tente manter algum texto junto com cada imagem
+4. **Numeração**: Verifique se a numeração automática das figuras está correta e sequencial
+5. **Cores**: Se for imprimir o documento, verifique se as cores das imagens são distinguíveis em preto e branco
+
+## Verificação Final
+
+Após inserir todas as imagens:
+
+1. Verifique se todas as imagens estão visíveis e bem posicionadas
+2. Confirme se todas as legendas estão corretas e formatadas adequadamente
+3. Certifique-se de que o texto faz referência a todas as figuras
+4. Verifique se a numeração das figuras está sequencial e correta
+5. Revise o documento para garantir que a inclusão das imagens não causou problemas de formatação em outras partes do texto

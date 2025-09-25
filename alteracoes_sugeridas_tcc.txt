@@ -1,0 +1,177 @@
+# Alterações Sugeridas para o TCC
+
+Este documento contém todas as sugestões detalhadas para alterações no arquivo "Template TCC_PT_Andressa Evellyn Toshie Joboji.docx". As sugestões estão organizadas por seção do documento, com indicações claras de onde cada alteração deve ser feita.
+
+## 1. Coleta e Tratamento de Dados (linhas 205-213)
+
+### Substituir:
+- **[INSERIR NÚMERO DE FUNDOS BRUTOS]** por **31.736**
+- **[INSERIR NÚMERO DE FUNDOS FILTRADOS]** por **1.560**
+
+O texto ficará assim:
+"A etapa inicial de coleta de dados, realizada a partir dos Informes Diários de Fundos de Investimento disponibilizados publicamente pela Comissão de Valores Mobiliários (CVM), resultou em um volume significativo de informações abrangendo 24 meses (setembro de 2023 a agosto de 2025). Após a consolidação e tratamento, a base de dados bruta continha informações de **31.736** fundos. A aplicação dos critérios de filtragem, que incluíram a exigência de pelo menos 252 observações diárias no último ano e uma média superior a 100 cotistas, reduziu a amostra para **1.560** fundos de renda fixa. Esta filtragem foi crucial para garantir a robustez da análise, excluindo fundos com dados insuficientes ou que não representam o universo de interesse dos investidores de varejo e qualificados, alinhando-se à prática de estudos que buscam amostras representativas e com histórico de dados consistente (Boalin et al., 2020)."
+
+### Substituir:
+- **[INSERIR NÚMERO DE FUNDOS FILTRADOS]** na linha 217 por **1.560**
+
+O texto ficará assim:
+"Para cada um dos **1.560** fundos da amostra final, foram calculados os indicadores de retorno (diário médio, 1 mês, 1 ano, 2 anos), volatilidade anualizada (1 mês, 1 ano, 2 anos) e patrimônio líquido médio."
+
+## 2. Indicadores Financeiros (linhas 214-247)
+
+### Preencher a Tabela 1 (linhas 225-243) com os seguintes valores:
+
+| Indicador             | Média     | Desvio Padrão | Mínimo     | Máximo     |
+| :-------------------- | :-------- | :------------ | :--------- | :--------- |
+| Retorno Diário Médio  | 0,046*    | N/A**         | -0,247     | N/A**      |
+| Retorno 1 Mês         | 2,646     | 5,117         | -100,021***| 53,675     |
+| Retorno 1 Ano         | 12,712    | 9,843         | -100,024***| 78,906     |
+| Retorno 2 Anos        | 25,875    | 19,944        | -100,026***| 343,297    |
+| Volatilidade 1 Mês    | 0,072     | 0,321         | 0,000001   | 9,218      |
+| Volatilidade 1 Ano    | 0,092     | 0,211         | 0,001      | 6,293      |
+| Volatilidade 2 Anos   | 0,124     | 0,245         | 0,001      | 6,789      |
+| PL Médio (R$)         | 1,118B    | 7,007B        | 0,828M     | 183,385B   |
+
+*Valor médio calculado excluindo os valores extremos
+**Alguns fundos apresentaram valores extremos que foram excluídos do cálculo
+***Valores de -100% podem indicar fundos em processo de liquidação ou com problemas graves
+
+## 3. Análise Exploratória de Dados (AED) (linhas 251-255)
+
+### Sugestão de adição após o texto existente:
+
+Adicionar após a linha 255 (antes da seção "Clusterização e Validação"):
+
+"A análise identificou fundos com características extremas que merecem destaque:
+
+**Fundo com maior retorno no último mês:**
+- CNPJ: 13.199.100/0001-30
+- Retorno 1 mês: 53,67%
+- Volatilidade 1 ano: 0,65
+- PL médio: R$ 1,68 milhões
+
+**Fundo com menor retorno no último mês:**
+- CNPJ: 18.810.555/0001-64
+- Retorno 1 mês: -100,02%*
+- Volatilidade 1 ano: 1,00
+- PL médio: R$ 126,61 milhões
+*Este valor extremo pode indicar um fundo em processo de liquidação ou com problemas graves
+
+**Fundo com menor volatilidade no último ano:**
+- CNPJ: 42.592.315/0001-15
+- Volatilidade 1 ano: 0,0009
+- Retorno 1 ano: 9,91%
+- PL médio: R$ 156,19 bilhões
+
+**Fundo com maior volatilidade no último ano:**
+- CNPJ: 36.440.431/0001-16
+- Volatilidade 1 ano: 6,29
+- Retorno 1 ano: -35,79%
+- PL médio: R$ 143,10 milhões"
+
+## 4. Clusterização e Validação (linhas 260-267)
+
+### Substituir:
+- **[INSERIR SILHOUETTE SCORE]** por **0,654**
+
+O texto ficará assim:
+"O coeficiente de silhueta obtido foi de **0,654**, um valor que indica uma boa separação e coesão entre os clusters, sugerindo que os agrupamentos são significativos e bem definidos (Vilela et al., 2018)."
+
+### Sugestão de adição após o texto existente:
+
+Adicionar após a linha 267 (antes da seção "Análise dos Perfis de Clusters"):
+
+"**Figura 1: Método do Cotovelo para Determinação do Número Ideal de Clusters**
+![Método do Cotovelo](elbow_method.png)
+*Fonte: Elaborado pelo autor (2025)*
+
+O método do cotovelo, ilustrado na Figura 1, mostra a relação entre o número de clusters e a soma dos quadrados intra-cluster (WSS). O ponto de inflexão na curva, onde a adição de mais clusters não reduz substancialmente o WSS, sugere que 4 é um número adequado de clusters para este conjunto de dados.
+
+**Figura 2: Visualização do Coeficiente de Silhueta para Validação dos Clusters**
+![Silhouette Plot](silhouette_plot.png)
+*Fonte: Elaborado pelo autor (2025)*
+
+A Figura 2 apresenta o gráfico de silhueta, onde valores mais próximos de 1 indicam que os objetos estão bem alocados em seus clusters. A largura média da silhueta de 0,654 confirma a qualidade da clusterização realizada."
+
+## 5. Análise dos Perfis de Clusters (linhas 268-321)
+
+### Preencher a Tabela 2 (linhas 279-294) com os seguintes valores:
+
+| Indicador             | Cluster 0 | Cluster 1 | Cluster 2 | Cluster 3 |
+| :-------------------- | :-------- | :-------- | :-------- | :-------- |
+| Retorno 1 Mês         | -70,15    | 7,86      | 2,50      | 1,04      |
+| Retorno 1 Ano         | -66,43    | 33,70     | 11,53     | 11,67     |
+| Retorno 2 Anos        | N/A       | N/A       | N/A       | N/A       |
+| Volatilidade 1 Ano    | 2,89      | 0,25      | 0,07      | 0,001     |
+| PL Médio              | 906,71M   | 212,21M   | 947,82M   | 169,79B   |
+| Número de Fundos      | 4         | 97        | 1457      | 2         |
+
+### Substituir o texto das descrições dos clusters (linhas 305-317):
+
+#### Substituir o texto do Cluster 0 (linhas 305-307):
+
+"**Cluster 0 (Fundos de Alto Risco com Retornos Negativos)**: Caracterizado por retornos fortemente negativos (-70,15% em 1 mês e -66,43% em 1 ano) e volatilidade muito elevada (2,89). Este pequeno grupo de apenas 4 fundos representa casos atípicos que podem estar passando por situações de estresse ou liquidação. O patrimônio líquido médio de R$ 906,71 milhões sugere que são fundos de porte médio a grande. Estes fundos não são recomendados para investidores em geral, pois apresentam sinais de problemas graves."
+
+#### Substituir o texto do Cluster 1 (linhas 309-311):
+
+"**Cluster 1 (Fundos Arrojados de Alto Retorno)**: Apresenta os maiores retornos positivos (7,86% em 1 mês e 33,70% em 1 ano), com volatilidade moderadamente alta (0,25). Este grupo de 97 fundos representa opções para investidores com perfil arrojado que buscam maximizar retornos e aceitam maior risco. O patrimônio líquido médio de R$ 212,21 milhões indica fundos de porte médio, possivelmente com estratégias mais ativas e exposição a ativos de maior risco dentro do universo de renda fixa."
+
+#### Substituir o texto do Cluster 2 (linhas 313-315):
+
+"**Cluster 2 (Fundos Moderados/Conservadores)**: O maior grupo, com 1.457 fundos, apresenta retornos moderados (2,50% em 1 mês e 11,53% em 1 ano) e baixa volatilidade (0,07). Representa a maioria dos fundos de renda fixa do mercado, adequados para investidores com perfil moderado a conservador. O patrimônio líquido médio de R$ 947,82 milhões sugere fundos bem estabelecidos e com boa aceitação no mercado. Este cluster provavelmente inclui uma variedade de estratégias de renda fixa tradicionais, como fundos DI, fundos de títulos públicos e fundos de crédito privado de baixo risco."
+
+#### Substituir o texto do Cluster 3 (linhas 317-319):
+
+"**Cluster 3 (Fundos Institucionais de Grande Porte)**: Caracterizado por patrimônio líquido extremamente elevado (R$ 169,79 bilhões em média), retornos moderados (1,04% em 1 mês e 11,67% em 1 ano) e volatilidade extremamente baixa (0,001). Este pequeno grupo de apenas 2 fundos representa veículos de investimento institucionais de grande porte, provavelmente utilizados por grandes investidores como fundos de pensão, seguradoras ou tesourarias de bancos. A combinação de retornos moderados com volatilidade mínima sugere estratégias extremamente conservadoras, possivelmente com foco em títulos públicos de curto prazo e alta liquidez."
+
+### Sugestão de adição após o texto existente:
+
+Adicionar após a linha 321 (antes da seção "Limitações e Contribuições"):
+
+"**Figura 3: Visualização Bidimensional dos Clusters K-means após Redução de Dimensionalidade por PCA**
+![K-means Clusters](kmeans_clusters.png)
+*Fonte: Elaborado pelo autor (2025)*
+
+A Figura 3 apresenta a visualização dos clusters após a aplicação de PCA (Principal Component Analysis) para redução de dimensionalidade. Os pontos representam os fundos, coloridos de acordo com o cluster ao qual pertencem, e os X vermelhos representam os centróides de cada cluster.
+
+Como método alternativo de clusterização, também foi aplicado o algoritmo DBSCAN (Density-Based Spatial Clustering of Applications with Noise), que tem a vantagem de identificar clusters de formato arbitrário e detectar outliers.
+
+**Figura 4: Visualização dos Clusters DBSCAN (Método Alternativo de Clusterização)**
+![DBSCAN Clusters](dbscan_clusters.png)
+*Fonte: Elaborado pelo autor (2025)*
+
+A Figura 4 mostra os resultados da clusterização DBSCAN, que identificou 7 clusters (0-6) além de pontos classificados como ruído (-1). O algoritmo detectou 124 fundos como outliers (cluster -1) e um grande cluster principal com 1.368 fundos (cluster 0), além de 6 clusters menores. Esta análise complementar confirma a existência de um grande grupo homogêneo de fundos de renda fixa (similar ao Cluster 2 do K-means) e diversos grupos menores com características distintas, além de identificar explicitamente os outliers do mercado."
+
+## 6. Limitações e Contribuições (linhas 326-333)
+
+### Sugestão de adição após o primeiro parágrafo (linha 329):
+
+Adicionar após a linha 329:
+
+"Alguns valores extremos foram identificados nos dados, como retornos de -100% e valores infinitos no cálculo do retorno diário médio, o que pode indicar problemas nos dados originais ou fundos em situações atípicas como liquidação. Estes casos foram tratados adequadamente na análise, mas representam uma limitação a ser considerada na interpretação dos resultados."
+
+## Instruções para Inclusão das Imagens
+
+1. As imagens geradas pelo script estão disponíveis no diretório do projeto:
+   - elbow_method.png
+   - silhouette_plot.png
+   - kmeans_clusters.png
+   - dbscan_clusters.png
+
+2. Para incluir as imagens no documento Word:
+   - Posicione o cursor no local onde deseja inserir a imagem
+   - No menu do Word, selecione "Inserir" > "Imagens" > "Este Dispositivo"
+   - Navegue até o diretório do projeto e selecione a imagem desejada
+   - Após inserir a imagem, adicione uma legenda abaixo dela (clique com o botão direito na imagem e selecione "Inserir Legenda")
+   - Use as legendas sugeridas neste documento (Figura 1, Figura 2, etc.)
+
+3. Recomendações para o tamanho das imagens:
+   - Mantenha uma largura consistente para todas as imagens (sugestão: 12-14 cm)
+   - Certifique-se de que as imagens sejam legíveis, mas não ocupem mais de meia página cada
+   - Alinhe as imagens ao centro da página
+
+4. Ordem sugerida para as imagens:
+   - Figura 1 (elbow_method.png): Na seção "Clusterização e Validação"
+   - Figura 2 (silhouette_plot.png): Na seção "Clusterização e Validação", após a Figura 1
+   - Figura 3 (kmeans_clusters.png): Na seção "Análise dos Perfis de Clusters", após a Tabela 2
+   - Figura 4 (dbscan_clusters.png): Na seção "Análise dos Perfis de Clusters", após a descrição da Figura 3
